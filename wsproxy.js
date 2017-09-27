@@ -2,7 +2,6 @@ const WebSocket = require('ws');
 const eventEmitter = require('events');
 
 const findTarget = (servers) => {
-  // console.log(servers[0].openSockets, servers[1].openSockets, servers[2].openSockets);
   let target = null;
   for (let i = 0; i < servers.length; i += 1) {
     if (target === null && servers[i].active) target = servers[i];
@@ -25,8 +24,6 @@ class WsProxy extends eventEmitter {
       if (options === null || options === undefined) throw 'Error: Options parameter not provided'
       const wss = new WebSocket.Server({ server });
       wss.on('connection', (clientWs) => {
-        // console.log(options[0].openSockets, options[1].openSockets, options[2].openSockets);
-        // console.log(this.tunnels.length + ' open sockets');
         const messageQueue = [];
         let tunnelOpen = false;
         const targetServer = findTarget(options);
@@ -35,7 +32,6 @@ class WsProxy extends eventEmitter {
         clientWs.on('message', (message) => {
           if (tunnelOpen) {
             targetWs.send(message);
-            // console.log(message);
           } else {
             messageQueue.push(message);
           }
@@ -66,9 +62,6 @@ class WsProxy extends eventEmitter {
                 return true;
               }
             });
-            // console.log(currServer);
-            // console.log(currServer[0].targetServer.port, ' disconnected');
-            // console.log(this.tunnels.length + ' open sockets');
             this.tunnels.splice(serverIndex, 1);
             clientWs.close();
           });

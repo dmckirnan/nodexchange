@@ -1,5 +1,4 @@
 const cluster = require('cluster');
-
 const clusterSwitch = {};
 
 /**
